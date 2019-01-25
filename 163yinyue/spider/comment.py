@@ -1,7 +1,6 @@
 import requests
 import codecs
 import base64
-from bs4 import BeautifulSoup
 from Crypto.Cipher import AES
 from spider import setting
 

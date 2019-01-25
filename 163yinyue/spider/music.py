@@ -1,6 +1,7 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+from terminaltables import AsciiTable
 from spider import setting
 
 class music:
@@ -15,6 +16,8 @@ class music:
             soup = BeautifulSoup(session.get(music_url, headers=self.headers).text, 'lxml')
             songs = json.loads(soup.find('p').get_text())['result']['tracks']
             print('歌单包含歌曲{}首'.format(len(songs)))
+
+            table = [['歌曲名', '歌曲ID', '创作者', '创作者ID', '所属专辑']]
             for song in songs:
                 artist_li = []
                 for one in song['artists']:
@@ -24,7 +27,9 @@ class music:
                 artist = '/'.join(artist_li)
                 artist_id = song['artists'][0]['id']
                 album_name = song['album']['name']
-                print('歌曲名：{} 歌曲id：{} 作者：{} 作者id：{} 专辑名：{}'.format(name, song_id, artist, artist_id, album_name))
+                # print('歌曲名：{} 歌曲id：{} 作者：{} 作者id：{} 专辑名：{}'.format(name, song_id, artist, artist_id, album_name))
+                table.append([name, song_id, artist, artist_id, album_name])
+            print(AsciiTable(table).table)
         except Exception as e:
             print("抓取歌单歌曲页面存在问题：{} 歌单ID：{}".format(e, id))
 
@@ -46,6 +51,8 @@ class music:
             print("标签：{}".format(tags))
             songs = json.loads(soup.find('p').get_text())['result']['tracks']
             print('歌单包含歌曲{}首'.format(len(songs)))
+
+            table = [['歌曲名', '歌曲ID', '创作者', '创作者ID', '所属专辑']]
             for song in songs:
                 artist_li = []
                 for one in song['artists']:
@@ -55,7 +62,9 @@ class music:
                 artist = '/'.join(artist_li)
                 artist_id = song['artists'][0]['id']
                 album_name = song['album']['name']
-                print('歌曲名：{} 歌曲id：{} 作者：{} 作者id：{} 专辑名：{}'.format(name, song_id, artist, artist_id, album_name))
+                # print('歌曲名：{} 歌曲id：{} 作者：{} 作者id：{} 专辑名：{}'.format(name, song_id, artist, artist_id, album_name))
+                table.append([name, song_id, artist, artist_id, album_name])
+            print(AsciiTable(table).table)
         except Exception as e:
             print("抓取歌单详情存在问题：{} 歌单ID：{}".format(e, id))
 

@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from terminaltables import AsciiTable
 from spider import setting
 
 class songsheet:
@@ -22,9 +23,24 @@ class songsheet:
         except Exception as e:
             print("抓取歌单出现问题：{} 歌单类型：{} 页码：{}".format(e, style, page))
 
+    def show_classify(self):
+        table = [['类别', '风格列表']]
+        for kind, styles in setting.classify.items():
+            num = 0
+            msg = ''
+            for style in styles:
+                num += 1
+                if num % 5 == 0:
+                    msg += style + '\n'
+                else:
+                    msg += style + '，'
+            table.append([kind, msg])
+        print(AsciiTable(table).table)
+
+
 
 if __name__ == "__main__":
     songsheet_test = songsheet()
-    songsheet_test.get_songsheet(3)
+    songsheet_test.show_classify()
 
 
