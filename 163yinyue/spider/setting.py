@@ -31,6 +31,11 @@ djradio_dict = {'有声书': '10001', '知识技能': '453050', '商业财经': 
                 '情感调频': '3', '美文读物': '6', '脱口秀': '5', '广播剧': '7', '二次元': '3001', '明星做主播': '1',
                 '娱乐|影视': '4', '科技科学': '453052', '校园|教育': '4001', '旅途|城市': '12'}
 
+singer_dict = {'华语男歌手': '1001', '华语女歌手': '1002', '华语组合/乐队': '1003', '欧美男歌手': '2001', '欧美女歌手': '2002',
+               '欧美组合/乐队': '2003', '日本男歌手': '6001', '日本女歌手': '6002', '日本组合/乐队': '6003', '韩国男歌手': '7001',
+               '韩国女歌手': '7002', '韩国组合/乐队': '7003', '其他男歌手': '4001', '其他女歌手': '4002', '其他组合/乐队': '4003'}
+
+singer_initial = {'热门': '-1', '其他': '0', 'A': '65', 'B': '66', 'C': '67', 'D': '68', 'E': '69', 'F': '70', 'G': '71', 'H': '72', 'I': '73', 'J': '74', 'K': '75', 'L': '76', 'M': '77', 'N': '78', 'O': '79', 'P': '80', 'Q': '81', 'R': '82', 'S': '83', 'T': '84', 'U': '85', 'V': '86', 'W': '87', 'X': '88', 'Y': '89', 'Z': '90'}
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 SE 2.X MetaSr 1.0',
@@ -51,3 +56,8 @@ search_url = 'http://music.163.com/api/search/pc'
 toplist_url = 'https://music.163.com/discover/toplist?id={}'
 djradio_url = 'https://music.163.com/discover/djradio/category?id={}&order={}&_hash=allradios&limit=30&offset={}'
 radio_url = 'https://music.163.com/djradio?id={}&order={}&_hash=programlist&limit=100&offset={}'
+singer_url = 'https://music.163.com/discover/artist/cat?id={}&initial={}'
+singer_intro_url = 'https://music.163.com/artist/desc?id={}'
+singer_hot_url = 'https://music.163.com/artist?id={}'
+singer_album_url = 'https://music.163.com/artist/album?id={}&limit=12&offset={}'
+singer_MV_url = 'https://music.163.com/artist/mv?id={}&limit=12&offset={}'

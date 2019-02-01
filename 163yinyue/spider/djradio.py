@@ -73,4 +73,5 @@ class Djradio:
 if __name__ == "__main__":
     radio = Djradio()
     # radio.get_radios_top('3', '1', '上升最快')
-    radio.get_radio('526835598', '2', '升序')
+    radio.get_radio('527104641', '1', '升序')
+    # radio.show_classify()
