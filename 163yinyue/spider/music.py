@@ -3,21 +3,24 @@ import json
 from bs4 import BeautifulSoup
 from terminaltables import AsciiTable
 from spider import setting
+from utils import pysql
+import settings
 
 class music:
     def __init__(self):
         self.headers = setting.headers
         self.music_url = setting.music_url
+        self.session = settings.Session()
 
     def get_songs_info(self, id):
+        self.session.query(pysql.Song_sheet163).filter(pysql.Song_sheet163.songsheet_id == id).update({'over': 'Y'})
         music_url = self.music_url.format(id)
         session = requests.Session()
         try:
             soup = BeautifulSoup(session.get(music_url, headers=self.headers).text, 'lxml')
             songs = json.loads(soup.find('p').get_text())['result']['tracks']
-            print('歌单包含歌曲{}首'.format(len(songs)))
-
-            table = [['歌曲名', '歌曲ID', '创作者', '创作者ID', '所属专辑']]
+            # table = [['歌曲名', '歌曲ID', '创作者', '创作者ID', '所属专辑']]
+            exist = 0
             for song in songs:
                 artist_li = []
                 for one in song['artists']:
@@ -28,8 +31,15 @@ class music:
                 artist_id = song['artists'][0]['id']
                 album_name = song['album']['name']
                 # print('歌曲名：{} 歌曲id：{} 作者：{} 作者id：{} 专辑名：{}'.format(name, song_id, artist, artist_id, album_name))
-                table.append([name, song_id, artist, artist_id, album_name])
-            print(AsciiTable(table).table)
+                if pysql.single("music163", "song_id", (song_id)) is True:
+                    self.session.add(pysql.Music163(song_id=song_id, song_name=name, author=artist))
+                    self.session.commit()
+                    exist = exist + 1
+                else:
+                    print('{} : {} {}'.format("重复抓取歌曲", name, "取消持久化"))
+            #     table.append([name, song_id, artist, artist_id, album_name])
+            # print(AsciiTable(table).table)
+            print("歌单包含歌曲 {} 首,数据库 merge 歌曲 {} 首 \r\n".format(len(songs), exist))
         except Exception as e:
             print("抓取歌单歌曲页面存在问题：{} 歌单ID：{}".format(e, id))
 
@@ -52,7 +62,8 @@ class music:
             songs = json.loads(soup.find('p').get_text())['result']['tracks']
             print('歌单包含歌曲{}首'.format(len(songs)))
 
-            table = [['歌曲名', '歌曲ID', '创作者', '创作者ID', '所属专辑']]
+            # table = [['歌曲名', '歌曲ID', '创作者', '创作者ID', '所属专辑']]
+            exist = 0
             for song in songs:
                 artist_li = []
                 for one in song['artists']:
@@ -63,8 +74,15 @@ class music:
                 artist_id = song['artists'][0]['id']
                 album_name = song['album']['name']
                 # print('歌曲名：{} 歌曲id：{} 作者：{} 作者id：{} 专辑名：{}'.format(name, song_id, artist, artist_id, album_name))
-                table.append([name, song_id, artist, artist_id, album_name])
-            print(AsciiTable(table).table)
+                if pysql.single("music163", "song_id", (song_id)) is True:
+                    self.session.add(pysql.Music163(song_id=song_id, song_name=name, author=artist))
+                    self.session.commit()
+                    exist = exist + 1
+                else:
+                    print('{} : {} {}'.format("重复抓取歌曲", name, "取消持久化"))
+            #     table.append([name, song_id, artist, artist_id, album_name])
+            # print(AsciiTable(table).table)
+            print("歌单包含歌曲 {} 首,数据库 merge 歌曲 {} 首 \r\n".format(len(songs), exist))
         except Exception as e:
             print("抓取歌单详情存在问题：{} 歌单ID：{}".format(e, id))
 

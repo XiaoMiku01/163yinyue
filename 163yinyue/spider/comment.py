@@ -3,6 +3,8 @@ import codecs
 import base64
 from Crypto.Cipher import AES
 from spider import setting
+from utils import pysql
+import settings
 
 class comment:
     def __init__(self):
@@ -10,6 +12,7 @@ class comment:
         self.comment_url = setting.comment_url
         self.comment_api = setting.comment_api
         self.encSecKey = self.rsaEncrypt()
+        self.session = settings.Session()
 
     def buildParams(self, song_id, page):
         if page == 1:
@@ -46,6 +49,9 @@ class comment:
                 now_page += 1
 
     def get_comment(self, song_id, page=1, normal=True):
+        if page == 1:
+            self.session.query(pysql.Comment163).filter(pysql.Comment163.song_id == song_id).delete()
+            self.session.commit()
         data = {'params': self.buildParams(song_id, page), 'encSecKey': self.encSecKey}
         url = self.comment_url.format(song_id)
         api = self.comment_api.format(song_id, str(20*(page-1)))
@@ -57,13 +63,20 @@ class comment:
                     author = comment['user']['nickname']
                     likecount = comment['likedCount']
                     content = comment['content']
+                    self.session.add(pysql.Comment163(song_id=song_id, txt=content, author=author, liked=likecount))
+                    self.session.flush()
                     print('作者：{} 评论：{} 点赞：{}'.format(author, content, likecount))
             if page == 1:
                 for comment in response.json()['hotComments']:
                     author = comment['user']['nickname']
                     likecount = comment['likedCount']
                     content = comment['content']
+                    self.session.add(pysql.Comment163(song_id=song_id, txt=content, author=author, liked=likecount))
+                    self.session.flush()
                     print('作者：{} 评论：{} 点赞：{}'.format(author, content, likecount))
+            self.session.query(pysql.Music163).filter(pysql.Music163.song_id == song_id).update(
+                {'over': 'Y', 'comment': total})
+            self.session.commit()
             # print('api获取内容')
             # response = requests.get(api, headers=self.headers, timeout=10)
             # print(response.json().keys())

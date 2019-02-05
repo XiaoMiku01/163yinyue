@@ -31,5 +31,6 @@ def get_mysql():
     uri = re.search('.*(?=/)', link).group(0)
     return {"db": db, "uri": uri}
 
-if __name__ == "__main__":
-    print(PATH)
+def get_use():
+    return cf.get("core", "use")
+
