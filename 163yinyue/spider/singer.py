@@ -89,10 +89,10 @@ if __name__ == "__main__":
     singer = Singer()
     # singer.show_classify()
     # singer.get_singers()
-    # singer.get_singer_introduction('8103')
+    singer.get_singer_introduction('8103')
     # singer.get_singer_hot('10559')
     # singer.get_singer_album('10559', '1')
-    singer.get_singer_mv('10559', '1')
+    # singer.get_singer_mv('10559', '1')
 
 
 
