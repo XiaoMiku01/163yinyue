@@ -20,4 +20,35 @@
 重构代码
 添加用户登录后相关信息爬取
 
+## 使用指南
+
+```console
+$ python cli.py -M comment  --id 1062642
+$ # 歌曲id获取该歌曲全部评论
+```
+```console
+$ python cli.py -M comment  --page 1 --id 1062642
+$ # 歌曲id获取该歌曲指定页的评论
+```
+```console
+$ python cli.py -M comment  --page 1 --id 1062642 --normal False
+$ # 歌曲id获取该歌曲热门评论
+```
+```console
+$ python cli.py -M lyric --id 1062642
+$ # 歌曲id获取该歌曲歌词
+```
+```console
+$ python cli.py -M song_sheet --show True
+$ # 获取歌单风格类型
+```
+```console
+$ python cli.py -M song_sheet --page 1 --style '全部'
+$ # 获取指定类型指定页的所有歌单
+```
+```console
+$ python cli.py -M singer --id 8103
+$ # 歌手id获取该信息
+```
+
 
